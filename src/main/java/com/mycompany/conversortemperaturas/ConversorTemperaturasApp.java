@@ -1,12 +1,13 @@
-
 package com.mycompany.conversortemperaturas;
 
+import com.mycompany.conversortemperaturas.ui.ConversorFrame;
 
 public class ConversorTemperaturasApp {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-        System.out.println("Hola soy Greg");
+        java.awt.EventQueue.invokeLater(() -> {
+            new ConversorFrame().setVisible(true);
+        });
     }
-    
+
 }
