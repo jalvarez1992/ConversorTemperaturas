@@ -241,6 +241,9 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="tf_valor">
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tf_valorKeyTyped"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>

@@ -4,12 +4,14 @@
  */
 package com.mycompany.conversortemperaturas.ui;
 
+import com.mycompany.conversortemperaturas.utils.ConversorLogica;
+
 /**
  *
  * @author Gregory
  */
 public class ConversorFrame extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ConversorFrame.class.getName());
 
     /**
@@ -81,6 +83,12 @@ public class ConversorFrame extends javax.swing.JFrame {
         bt_limpiar.setForeground(new java.awt.Color(51, 51, 51));
         bt_limpiar.setText("Limpiar");
         bt_limpiar.addActionListener(this::bt_limpiarActionPerformed);
+
+        tf_valor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tf_valorKeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -189,7 +197,59 @@ public class ConversorFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cb_tipo_conversionActionPerformed
 
     private void bt_calcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_calcularActionPerformed
-        // TODO add your handling code here:
+        String textoIngresado = tf_valor.getText();
+
+        // 1. Validar que no esté vacío
+        if (textoIngresado.isEmpty()) {
+            // Mostrar alerta al usuario
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, ingrese un valor a convertir.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return; // Detiene la ejecución para que no intente calcular nada
+        }
+
+        double valor;
+
+        // 2. Validar que sea un número válido matemáticamente
+        try {
+            valor = Double.parseDouble(textoIngresado);
+        } catch (NumberFormatException e) {
+            // Si el usuario pegó letras o un formato inválido, atrapamos el error aquí
+            javax.swing.JOptionPane.showMessageDialog(this, "Ingrese un número válido.", "Error de Formato", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return; // Detiene la ejecución
+        }
+
+        // --- Si el código llega hasta aquí, el número es 100% seguro ---
+        String seleccion = (String) cb_tipo_conversion.getSelectedItem();
+        
+        double res;
+
+        switch (seleccion) {
+            case "Celsius a Fahrenheit":
+                res = ConversorLogica.celsiusAFahrenheit(valor);
+                // %.2f formatea el número a 2 decimales, seguido del símbolo °F
+                lb_respuesta.setText(String.format("%.2f °F", res));
+                break;
+            case "Fahrenheit a Celsius":
+                res = ConversorLogica.fahrenheitACelsius(valor);
+                lb_respuesta.setText(String.format("%.2f °C", res));
+                break;
+            case "Celsius a Kelvin":
+                res = ConversorLogica.celsiusAKelvin(valor);
+                // Recuerda: Kelvin es una escala absoluta, no usa el símbolo "°"
+                lb_respuesta.setText(String.format("%.2f K", res));
+                break;
+            case "Kelvin a Celsius":
+                res = ConversorLogica.kelvinACelsius(valor);
+                lb_respuesta.setText(String.format("%.2f °C", res));
+                break;
+            case "Fahrenheit a Kelvin":
+                res = ConversorLogica.fahrenheitAKelvin(valor);
+                lb_respuesta.setText(String.format("%.2f K", res));
+                break;
+            case "Kelvin a Fahrenheit":
+                res = ConversorLogica.kelvinAFahrenheit(valor);
+                lb_respuesta.setText(String.format("%.2f °F", res));
+                break;
+        }
     }//GEN-LAST:event_bt_calcularActionPerformed
 
     private void bt_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salirActionPerformed
@@ -197,8 +257,31 @@ public class ConversorFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_salirActionPerformed
 
     private void bt_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limpiarActionPerformed
-        // TODO add your handling code here:
+        lb_respuesta.setText("Respuesta");
+        tf_valor.setText("");
     }//GEN-LAST:event_bt_limpiarActionPerformed
+
+    private void tf_valorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_valorKeyTyped
+        char c = evt.getKeyChar();
+
+        // Suponiendo que tu JTextField se llama tf_valor
+        String textoActual = tf_valor.getText();
+
+        // 1. Permitir solo dígitos, el punto y el signo menos
+        if (!Character.isDigit(c) && c != '.' && c != '-') {
+            evt.consume(); // Ignora cualquier otra letra o símbolo
+        }
+
+        // 2. Evitar que se escriba más de un punto decimal
+        if (c == '.' && textoActual.contains(".")) {
+            evt.consume();
+        }
+
+        // 3. (Opcional) Evitar que el signo menos vaya en medio del número
+        if (c == '-' && !textoActual.isEmpty()) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tf_valorKeyTyped
 
     /**
      * @param args the command line arguments
