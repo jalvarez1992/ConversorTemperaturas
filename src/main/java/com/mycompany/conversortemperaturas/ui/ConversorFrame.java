@@ -17,6 +17,7 @@ public class ConversorFrame extends javax.swing.JFrame {
      */
     public ConversorFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
