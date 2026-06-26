@@ -20,6 +20,7 @@ public class ConversorFrame extends javax.swing.JFrame {
     public ConversorFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
+        tf_valor.requestFocus();
     }
 
     /**
@@ -203,6 +204,7 @@ public class ConversorFrame extends javax.swing.JFrame {
         if (textoIngresado.isEmpty()) {
             // Mostrar alerta al usuario
             javax.swing.JOptionPane.showMessageDialog(this, "Por favor, ingrese un valor a convertir.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            tf_valor.requestFocus();
             return; // Detiene la ejecución para que no intente calcular nada
         }
 
@@ -214,6 +216,7 @@ public class ConversorFrame extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             // Si el usuario pegó letras o un formato inválido, atrapamos el error aquí
             javax.swing.JOptionPane.showMessageDialog(this, "Ingrese un número válido.", "Error de Formato", javax.swing.JOptionPane.ERROR_MESSAGE);
+            tf_valor.requestFocus();
             return; // Detiene la ejecución
         }
 
@@ -250,6 +253,7 @@ public class ConversorFrame extends javax.swing.JFrame {
                 lb_respuesta.setText(String.format("%.2f °F", res));
                 break;
         }
+        
     }//GEN-LAST:event_bt_calcularActionPerformed
 
     private void bt_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salirActionPerformed
@@ -259,6 +263,7 @@ public class ConversorFrame extends javax.swing.JFrame {
     private void bt_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_limpiarActionPerformed
         lb_respuesta.setText("Respuesta");
         tf_valor.setText("");
+        tf_valor.requestFocus();
     }//GEN-LAST:event_bt_limpiarActionPerformed
 
     private void tf_valorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_valorKeyTyped
